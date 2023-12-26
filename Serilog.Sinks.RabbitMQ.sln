@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventLogBus.Client", "EventLogBus.Client\EventLogBus.Client.csproj", "{8DBCF705-A3FE-439E-9D81-661BC7348D71}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventLogBus.Expose", "EventLogBus.Expose\EventLogBus.Expose.csproj", "{6C1E8074-1E77-4EAF-A307-018DDEB3C8FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Sinks.RabbitMQ.Publisher", "Serilog.Sinks.RabbitMQ.Publisher\Serilog.Sinks.RabbitMQ.Publisher.csproj", "{6C1E8074-1E77-4EAF-A307-018DDEB3C8FC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Sinks.RabbitMQ.Core", "Serilog.Sinks.RabbitMQ.Core\Serilog.Sinks.RabbitMQ.Core.csproj", "{0818E351-B330-456A-9A60-5C592921DE85}"
 EndProject
@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Sinks.RabbitMQ.Clie
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Sinks.RabbitMQ.TransversalConfiguration", "Serilog.Sinks.RabbitMQ.TransversalConfiguration\Serilog.Sinks.RabbitMQ.TransversalConfiguration.csproj", "{302F4AAE-E277-4445-BBE5-3C966C802B48}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTest", "XUnitTest\XUnitTest.csproj", "{09D945C7-57BB-4C85-9423-8ECF62A24F5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUnitTest", "XUnitTest\XUnitTest.csproj", "{09D945C7-57BB-4C85-9423-8ECF62A24F5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -6,16 +6,16 @@ Picture a world in constant evolution, where C# and .NET advance by leaps and bo
 
 ### Dependencies
 
-|Serilog.Sinks.RabbitMQ|.NETCore|Serilog|Serilog.AspNetCore|Serilog.Sinks.PeriodicBatching|RabbitMQ.Client|Newtonsoft.Json|
-|---|---|---|---|---|---|---|
-|1.0.0|8.*|3.1.1|8.0.0|3.1.0|6.8.1|13.0.3|
+|Serilog.Sinks.RabbitMQ|.NETCore|Serilog|RabbitMQ.Client|Newtonsoft.Json|
+|---|---|---|---|---|
+|1.0.0|8.*|3.1.1|6.8.1|13.0.3|
 
 ## Installation
 
 Using [Nuget](https://www.nuget.org/packages/Serilog.Sinks.RabbitMQ/):
 
 ```
-Install-Package Serilog.Sinks.RabbitMQ.New
+dotnet add package Serilog.Sinks.RabbitMQ.Publisher --version 1.0.0
 ```
 ## Version 1.0.0 configuration
 
