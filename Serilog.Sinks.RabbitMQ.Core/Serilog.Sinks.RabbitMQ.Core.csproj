@@ -12,8 +12,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\EventLogBus.Client\EventLogBus.Client.csproj" />
-	  <ProjectReference Include="..\Serilog.Sinks.RabbitMQ.ClientImplementation\Serilog.Sinks.RabbitMQ.ClientImplementation.csproj" />
 	  <ProjectReference Include="..\Serilog.Sinks.RabbitMQ.TransversalConfiguration\Serilog.Sinks.RabbitMQ.TransversalConfiguration.csproj" />
 	</ItemGroup>
 

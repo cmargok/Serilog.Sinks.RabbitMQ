@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Serilog.Sinks.RabbitMQ.TransversalConfiguration.Tools;
+using Serilog.Sinks.RabbitMQ.Publisher.Configuration.Tools;
 
-namespace EventLogBus.Expose.Middleware
+namespace Serilog.Sinks.RabbitMQ.Publisher.Expose.Middleware
 {
     /// <summary>
     /// EventLogBusException Handler middleware Constructor

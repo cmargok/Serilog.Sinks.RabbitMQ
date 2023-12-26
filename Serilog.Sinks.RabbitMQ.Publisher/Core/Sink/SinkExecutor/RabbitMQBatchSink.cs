@@ -1,12 +1,12 @@
 ﻿using Serilog.Events;
 using Serilog.Formatting;
 using Serilog.Sinks.PeriodicBatching;
-using Serilog.Sinks.RabbitMQ.ClientImplementation;
-using Serilog.Sinks.RabbitMQ.TransversalConfiguration;
-using Serilog.Sinks.RabbitMQ.TransversalConfiguration.Entities;
-using Serilog.Sinks.RabbitMQ.TransversalConfiguration.Tools;
+using Serilog.Sinks.RabbitMQ.Publisher.ClientImplementation;
+using Serilog.Sinks.RabbitMQ.Publisher.Configuration;
+using Serilog.Sinks.RabbitMQ.Publisher.Configuration.Entities;
+using Serilog.Sinks.RabbitMQ.Publisher.Configuration.Tools;
 
-namespace Serilog.Sinks.RabbitMQ.Core.Sink.SinkExecutor
+namespace Serilog.Sinks.RabbitMQ.Publisher.Core.Sink.SinkExecutor
 {
     public class RabbitMQBatchSink(EventClientConfiguration configuration, ITextFormatter textFormatter) : IBatchedLogEventSink
     {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Serilog.Sinks.RabbitMQ.TransversalConfiguration;
-namespace Serilog.Sinks.RabbitMQ.Core.Provider
+using Serilog.Sinks.RabbitMQ.Publisher.Configuration;
+
+namespace Serilog.Sinks.RabbitMQ.Publisher.Core.Provider
 {
     public static class EventLogPublisherProvider
     {

@@ -1,6 +1,6 @@
-﻿using Serilog.Sinks.RabbitMQ.TransversalConfiguration.Entities;
+﻿using Serilog.Sinks.RabbitMQ.Publisher.Configuration.Entities;
 
-namespace Serilog.Sinks.RabbitMQ.ClientImplementation
+namespace Serilog.Sinks.RabbitMQ.Publisher.ClientImplementation
 {
     public interface IRabbitMQClient : IDisposable
     {

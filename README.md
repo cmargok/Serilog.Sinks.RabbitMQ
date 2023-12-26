@@ -19,8 +19,18 @@ dotnet add package Serilog.Sinks.RabbitMQ.Publisher --version 1.0.0
 ```
 ## Version 1.0.0 configuration
 
-We can configure the RabbitMQSink 
+We can configure the RabbitMQSink in many ways
 
+* usings 
+```csharp
+using Serilog.Sinks.RabbitMQ.Publisher.Core.Provider;
+using Serilog.Sinks.RabbitMQ.Publisher.Configuration;
+```
+
+Declare UseSerilog
+```csharp
+builder.Host.UseSerilog();
+```
 * Using appsettings.json
 
 ```json
@@ -174,8 +184,11 @@ public virtual async Task HandleExceptionAsync(EventLogBusException exceptions)
 
 Don't forget register the middleware
 ```csharp
+
+using Serilog.Sinks.RabbitMQ.Publisher.Expose.Middleware;
+
 //==================== MiddleWares ===============================
-app.UseMiddleware<EventLogBusMiddleware>();
+app.UseMiddleware<EventLogBusExceptionMiddleware>();
 ```
 
 ## References

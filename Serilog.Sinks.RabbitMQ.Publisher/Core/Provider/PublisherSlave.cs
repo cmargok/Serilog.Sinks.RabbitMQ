@@ -1,10 +1,10 @@
-﻿using EventLogBus.Client;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Serilog.Formatting.Json;
-using Serilog.Sinks.RabbitMQ.Core.Sink;
-using Serilog.Sinks.RabbitMQ.TransversalConfiguration;
+using Serilog.Sinks.RabbitMQ.Publisher.Configuration;
+using Serilog.Sinks.RabbitMQ.Publisher.Core.Sink;
+using Serilog.Sinks.RabbitMQ.Publisher.Expose.EventLogBus.Client;
 
-namespace Serilog.Sinks.RabbitMQ.Core.Provider
+namespace Serilog.Sinks.RabbitMQ.Publisher.Core.Provider
 {
 
     public class PublisherSlave

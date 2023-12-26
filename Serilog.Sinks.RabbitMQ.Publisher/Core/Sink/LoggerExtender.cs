@@ -1,10 +1,10 @@
 ﻿using Serilog.Configuration;
 using Serilog.Sinks.PeriodicBatching;
-using Serilog.Sinks.RabbitMQ.Core.Sink.SinkExecutor;
-using Serilog.Sinks.RabbitMQ.TransversalConfiguration;
-using Serilog.Sinks.RabbitMQ.TransversalConfiguration.Tools;
+using Serilog.Sinks.RabbitMQ.Publisher.Configuration;
+using Serilog.Sinks.RabbitMQ.Publisher.Configuration.Tools;
+using Serilog.Sinks.RabbitMQ.Publisher.Core.Sink.SinkExecutor;
 
-namespace Serilog.Sinks.RabbitMQ.Core.Sink
+namespace Serilog.Sinks.RabbitMQ.Publisher.Core.Sink
 {
     public static class LoggerExtender
     {

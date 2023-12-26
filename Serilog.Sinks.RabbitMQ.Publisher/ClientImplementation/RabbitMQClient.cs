@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
 using RabbitMQ.Client;
-using Serilog.Sinks.RabbitMQ.TransversalConfiguration;
-using Serilog.Sinks.RabbitMQ.TransversalConfiguration.Entities;
+using Serilog.Sinks.RabbitMQ.Publisher.Configuration;
+using Serilog.Sinks.RabbitMQ.Publisher.Configuration.Entities;
 using System.Text;
-namespace Serilog.Sinks.RabbitMQ.ClientImplementation
+namespace Serilog.Sinks.RabbitMQ.Publisher.ClientImplementation
 {
     public class RabbitMQClient : IRabbitMQClient
     {
