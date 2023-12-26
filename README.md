@@ -15,7 +15,7 @@ Picture a world in constant evolution, where C# and .NET advance by leaps and bo
 Using [Nuget](https://www.nuget.org/packages/Serilog.Sinks.RabbitMQ/):
 
 ```
-dotnet add package Serilog.Sinks.RabbitMQ.Publisher --version 1.0.0
+dotnet add package Serilog.Sinks.RabbitMQ.Publisher --version 1.0.2
 ```
 ## Version 1.0.0 configuration
 
