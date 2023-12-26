@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
+		<PackageReference Include="Serilog.Sinks.PeriodicBatching" Version="3.1.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\EventLogBus.Client\EventLogBus.Client.csproj" />
+	  <ProjectReference Include="..\Serilog.Sinks.RabbitMQ.ClientImplementation\Serilog.Sinks.RabbitMQ.ClientImplementation.csproj" />
+	  <ProjectReference Include="..\Serilog.Sinks.RabbitMQ.TransversalConfiguration\Serilog.Sinks.RabbitMQ.TransversalConfiguration.csproj" />
+	</ItemGroup>
+
+
+
+</Project>
