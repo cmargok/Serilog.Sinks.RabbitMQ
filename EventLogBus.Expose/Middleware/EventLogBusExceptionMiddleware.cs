@@ -7,7 +7,7 @@ namespace EventLogBus.Expose.Middleware
     /// EventLogBusException Handler middleware Constructor
     /// </summary>
     /// <param name="next"></param>
-    public class EventLogBusMiddleware(RequestDelegate next)
+    public class EventLogBusExceptionMiddleware(RequestDelegate next)
     {
         private readonly RequestDelegate _next = next;
 
@@ -28,7 +28,7 @@ namespace EventLogBus.Expose.Middleware
             }
         }
 
-        public static async Task HandleExceptionAsync(EventLogBusException exceptions)
+        public virtual async Task HandleExceptionAsync(EventLogBusException exceptions)
         {
             foreach (var ex in exceptions._innerExceptions)
             {

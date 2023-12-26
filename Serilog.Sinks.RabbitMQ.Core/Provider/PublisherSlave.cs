@@ -40,7 +40,7 @@ namespace Serilog.Sinks.RabbitMQ.Core.Provider
 
 
 
-        public PublisherSlave RegisterPublisher(Action<LoggerConfiguration> loggerConfig = null!, bool SleepRabbitMQClientLogger = false)
+        public PublisherSlave RegisterPublisher(Action<LoggerConfiguration> loggerConfig = null!, bool SleepRabbitMQClientLogger = false, bool UseDefaultLogger = true)
         {
 
             if (loggerConfig != null)
@@ -62,7 +62,8 @@ namespace Serilog.Sinks.RabbitMQ.Core.Provider
 
             Log.Logger = _loggerConfiguration.CreateLogger();
 
-            _services.AddSingleton<IEventLogger, EventLogger>();
+            if (UseDefaultLogger)
+                _services.AddSingleton<IEventLogger, EventLogger>();
             return this;
         }
 

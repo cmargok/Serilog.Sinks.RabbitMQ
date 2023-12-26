@@ -29,7 +29,7 @@ namespace Serilog.Sinks.RabbitMQ.Core.Sink.SinkExecutor
                         ApiLog = stringWriter.ToString(),
                         ApiLogFrom = configuration.ApiName,
                     };
-                    await client.PublishAsync(eventTo);
+                    await client.PublishLogAsync(eventTo);
                 }
 
             }

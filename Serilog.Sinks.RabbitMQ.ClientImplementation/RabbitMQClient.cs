@@ -54,7 +54,7 @@ namespace Serilog.Sinks.RabbitMQ.ClientImplementation
                 NetworkRecoveryInterval = TimeSpan.FromSeconds(5),
             };
 
-        public async Task PublishAsync(EventTo @event)
+        public async Task PublishLogAsync(EventTo @event)
         {
             var currentModelIndex = Interlocked.Increment(ref _currentModelIndex);
 
