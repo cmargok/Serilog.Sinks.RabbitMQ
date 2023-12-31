@@ -132,7 +132,7 @@ builder.Services
 The method RegisterPublisher has 3 params overload
 
 #### RegisterPublisher()
-    It will use the default rabbitmq logger
+It will use the default rabbitmq logger
 ```csharp
 .RegisterPublisher();
 ```  
