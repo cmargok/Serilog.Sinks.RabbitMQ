@@ -1,11 +1,13 @@
 ﻿using Newtonsoft.Json;
 using RabbitMQ.Client;
-using Serilog.Sinks.RabbitMQ.Publisher.Configuration;
 using Serilog.Sinks.RabbitMQ.Publisher.Configuration.Entities;
+using Serilog.Sinks.RabbitMQ.Publisher.Configuration.Settings;
+using Serilog.Sinks.RabbitMQ.Publisher.RabbitMQHandler.Contract;
 using System.Text;
-namespace Serilog.Sinks.RabbitMQ.Publisher.ClientImplementation
+
+namespace Serilog.Sinks.RabbitMQ.Publisher.RabbitMQHandler.ClientImplementation
 {
-    public class RabbitMQClient : IRabbitMQClient
+    internal class RabbitMQClient : IRabbitMQClient
     {
         // synchronization locks
         private const int MaxChannelCount = 64;
@@ -39,10 +41,10 @@ namespace Serilog.Sinks.RabbitMQ.Publisher.ClientImplementation
             // load configuration
             _config = configuration;
 
-            _publicationAddress = new PublicationAddress(_config.ExchangeType, _config.ExchangeName, _config.RouteKey);
+            _publicationAddress = new PublicationAddress(_config.Exchange.ExchangeType, _config.Exchange.ExchangeName, _config.Exchange.RouteKey);
 
             // initialize
-            _connectionFactory = SetConnectionFactory(configuration);
+            _connectionFactory = SetConnectionFactory(configuration: configuration);
         }
 
         private static ConnectionFactory SetConnectionFactory(EventClientConfiguration configuration)
@@ -51,18 +53,21 @@ namespace Serilog.Sinks.RabbitMQ.Publisher.ClientImplementation
                 UserName = configuration.Username,
                 Password = configuration.Password,
                 AutomaticRecoveryEnabled = true,
-                NetworkRecoveryInterval = TimeSpan.FromSeconds(5),
+                NetworkRecoveryInterval = TimeSpan.FromSeconds(value: 5),
+                Port = configuration.Port,
+                ClientProvidedName = configuration.ApiName
+
             };
 
         public async Task PublishLogAsync(EventTo @event)
         {
-            var currentModelIndex = Interlocked.Increment(ref _currentModelIndex);
+            var currentModelIndex = Interlocked.Increment(location: ref _currentModelIndex);
 
             currentModelIndex = (currentModelIndex % MaxChannelCount + MaxChannelCount) % MaxChannelCount;
 
             var modelLock = _modelLocks[currentModelIndex];
 
-            await modelLock.WaitAsync(_closeToken);
+            await modelLock.WaitAsync(cancellationToken: _closeToken);
             try
             {
                 var channel = _models[currentModelIndex];
@@ -79,16 +84,16 @@ namespace Serilog.Sinks.RabbitMQ.Publisher.ClientImplementation
 
                     properties = channel.CreateBasicProperties();
 
-                    properties.DeliveryMode = (byte)_config.DeliveryMode; // persistence
+                    properties.DeliveryMode = (byte)_config.Exchange.DeliveryMode; // persistence
 
                     _properties[currentModelIndex] = properties;
                 }
 
-                var message = JsonConvert.SerializeObject(@event);
+                var message = JsonConvert.SerializeObject(value: @event);
 
-                var body = Encoding.UTF8.GetBytes(message);
+                var body = Encoding.UTF8.GetBytes(s: message);
                 // push message to exchange
-                channel.BasicPublish(_publicationAddress, properties, body);
+                channel.BasicPublish(addr: _publicationAddress, basicProperties: properties, body: body);
             }
             finally
             {

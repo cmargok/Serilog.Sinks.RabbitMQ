@@ -8,16 +8,16 @@ Picture a world in constant evolution, where C# and .NET advance by leaps and bo
 
 |Serilog.Sinks.RabbitMQ|.NETCore|Serilog|RabbitMQ.Client|Newtonsoft.Json|
 |---|---|---|---|---|
-|1.0.0|8.*|3.1.1|6.8.1|13.0.3|
+|1.0.3|8.*|3.1.1|6.8.1|13.0.3|
 
 ## Installation
 
 Using [Nuget](https://www.nuget.org/packages/Serilog.Sinks.RabbitMQ/):
 
 ```
-dotnet add package Serilog.Sinks.RabbitMQ.Publisher --version 1.0.2
+dotnet add package Serilog.Sinks.RabbitMQ.Publisher --version 1.0.3
 ```
-## Version 1.0.0 configuration
+## Version 1.0.3 configuration
 
 We can configure the RabbitMQSink in many ways
 
@@ -36,16 +36,19 @@ builder.Host.UseSerilog();
 ```json
  "EventLogPublisher": {
     "ApiName": "MyApi",
-    "Username": "UserIsMyName",
-    "Password": "myPassUltraSecure",
-    "Hostnames": [ "localhost" ],
-    "ExchangeName": "exchangeToTesting",
-    "ExchangeType": "direct",
+    "Username": "userMyUser",
+    "Password": "asda",
     "Port": 5672,
-    "RouteKey": "logs"
+    "Hostnames": [ "localhost" ],
+    "Exchange": {
+      "ExchangeName": "logsExchange",
+      "ExchangeType": "direct",
+      "RouteKey": "logs"
+    }
   }
 
 ```
+
 
 To call it from program.cs, we use the extension method builder.Configuration.GetEventLogPublisherSettings(). This will read the settings we've added in the JSON file. Don't forget to call the CopyFrom method to copy the data into the sink.
 
@@ -53,7 +56,8 @@ To call it from program.cs, we use the extension method builder.Configuration.Ge
 builder.Services
     .AddEventLogPublisher((EventLogConfig, sinkSetting) =>
     {
-        EventLogConfig.CopyFrom(builder.Configuration.GetEventLogPublisherSettings());
+        EventLogConfig.Clone(builder.Configuration.GetEventLogPublisherSettings());
+        EventLogConfig.Exchange.DeliveryMode = RabbitMQDeliveryMode.Durable;// this is the default value, its not mandatory
         sinkSetting.BatchPostingLimit = 50;
         sinkSetting.Period = TimeSpan.FromSeconds(10);
         sinkSetting.QueueLimit = 500;
@@ -70,22 +74,26 @@ builder.Services
 builder.Services
     .AddEventLogPublisher((EventLogConfig, sinkSetting) =>
     {
-        EventLogConfig.CopyFrom(new EventClientConfiguration()
+        EventLogConfig.Clone(new EventClientConfiguration()
         {
             ApiName = "MyApi",
-            Username = "UserIsMyName",
-            Password = "myPassUltraSecure",
+            Username = "userMyUser",
+            Password = "asda",
             Hostnames = ["localhost"],
-            ExchangeName = "exchangeToTesting",
-            ExchangeType = "direct",
             Port = 5672,
-            DeliveryMode = RabbitMQDeliveryMode.Durable,
-            RouteKey = "logs",
+            Exchange = new ExchangeConfiguration()
+            {
+                ExchangeName = "logsExchange",
+                ExchangeType = "direct",
+                DeliveryMode = RabbitMQDeliveryMode.Durable,
+                RouteKey = "logs",
+            }
+
         });
         sinkSetting.BatchPostingLimit = 50;
         sinkSetting.Period = TimeSpan.FromSeconds(10);
         sinkSetting.QueueLimit = 500;
-        sinkSetting.LogMinimumLevel = LogEventLevel.Warning;
+        sinkSetting.LogMinimumLevel = LogEventLevel.Information;
     })
     .RegisterPublisher();
 
@@ -96,23 +104,24 @@ Don't forget to call the CopyFrom method to copy the data into the sink.
 
 ```csharp
 builder.Services
-    .AddEventLogPublisher((EventLogConfig, sinkSetting) =>
-    {
-        EventLogConfig.ApiName = "MyApi";
-        EventLogConfig.Username = "UserIsMyName";
-        EventLogConfig.Password = "myPassUltraSecure";
-        EventLogConfig.Hostnames = ["localhost"];
-        EventLogConfig.ExchangeName = "exchangeToTesting";
-        EventLogConfig.ExchangeType = "direct";
-        EventLogConfig.Port = 5672;
-        EventLogConfig.DeliveryMode = RabbitMQDeliveryMode.Durable;
-        EventLogConfig.RouteKey = "logs";        
-        sinkSetting.BatchPostingLimit = 50;
-        sinkSetting.Period = TimeSpan.FromSeconds(10);
-        sinkSetting.QueueLimit = 500;
-        sinkSetting.LogMinimumLevel = LogEventLevel.Warning;
-    })
-    .RegisterPublisher();
+      .AddEventLogPublisher((EventLogConfig, sinkSetting) =>
+        {
+
+            EventLogConfig.ApiName = "MyApi";
+            EventLogConfig.Username = "asdas";
+            EventLogConfig.Password = "asdafgf@1";
+            EventLogConfig.Hostnames = ["localhost"];
+            EventLogConfig.Port = 5672;
+            EventLogConfig.Exchange.ExchangeName = "logsExchange";
+            EventLogConfig.Exchange.ExchangeType = "direct";
+            EventLogConfig.Exchange.DeliveryMode = RabbitMQDeliveryMode.Durable;
+            EventLogConfig.Exchange.RouteKey = "logs";
+            sinkSetting.BatchPostingLimit = 50;
+            sinkSetting.Period = TimeSpan.FromSeconds(10);
+            sinkSetting.QueueLimit = 500;
+            sinkSetting.LogMinimumLevel = LogEventLevel.Information;
+        })
+       .RegisterPublisher();
 
 ```
 
@@ -120,42 +129,51 @@ builder.Services
 
 ### Adding more sinks into RabbitMQ.Sink Configuration
 
-The method RegisterPublisher receives 3 parameters
-* First one 
+The method RegisterPublisher has 3 params overload
+
+#### RegisterPublisher()
+    It will use the default rabbitmq logger
 ```csharp
-Action<LoggerConfiguration> loggerConfig = null!, 
+.RegisterPublisher();
 ```  
-we can add new sinks or let it by default
+#### RegisterPublisher(LogEventLevel logLevel = LogEventLevel.Debug, bool enableRabbitMQClientLogger = false, bool UseDefaultLogger = true)
+It has three params
+* addDefaultConsole 
+  -> set if the log level por default console log
+*  enableRabbitMQClientLogger 
+    -> enable or disable rabbitMQlogger
+* UseDefaultLogger 
+    -> enable or disable default centralized logger
+
+#### RegisterPublisher(Action<LoggerConfiguration> loggerConfig = null!, bool enableRabbitMQClientLogger = false, bool UseDefaultLogger = true) 
+
+It has three params
+* loggerConfig 
+```csharp
+    Action<LoggerConfiguration> loggerConfig = null!, 
+```  
+we can add new sinks or let it in null
 
 
 ```csharp
-builder.Services
-    .AddEventLogPublisher((EventLogConfig, sinkSetting) =>
-    {
-        EventLogConfig.CopyFrom(builder.Configuration.GetEventLogPublisherSettings());
-        sinkSetting.BatchPostingLimit = 50;
-        sinkSetting.Period = TimeSpan.FromSeconds(10);
-        sinkSetting.QueueLimit = 500;
-        sinkSetting.LogMinimumLevel = LogEventLevel.Warning;
-    })
+
     .RegisterPublisher(logger =>
     {
         logger.WriteTo.Logger(cl => cl
             .Filter.ByIncludingOnly(e => e.Level > LogEventLevel.Debug)
             .WriteTo.Console());
     }
-);
-```
-* Second one
-```csharp
-bool SleepRabbitMQClientLogger = false
-```
-If you set the property in true, the RabbitMQ sink will be disabled, "not loaded at all"
+);  
 
-* Third one
-```csharp 
-* bool UseDefaultLogger = false
 ```
+*  enableRabbitMQClientLogger 
+    -> enable or disable rabbitMQlogger
+* UseDefaultLogger 
+    -> enable or disable default centralized logger
+
+
+### Centralized Logger 
+
 I've implemented a centralized logger called EventLogger who uses the interface IEventLogger 
 ```csharp
 public interface IEventLogger

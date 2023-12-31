@@ -1,8 +1,8 @@
 ﻿namespace Serilog.Sinks.RabbitMQ.Publisher.Configuration.Tools
 {
-    public static class ToolServant
+    internal static class ToolServant
     {
         public static void ThrownByArgument(string paramName, string message)
-            => throw new ArgumentOutOfRangeException(paramName, message);
+            => throw new ArgumentOutOfRangeException(paramName: paramName, message: message);
     }
 }

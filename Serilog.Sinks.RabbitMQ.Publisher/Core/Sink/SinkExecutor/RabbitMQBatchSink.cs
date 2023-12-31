@@ -1,14 +1,14 @@
 ﻿using Serilog.Events;
 using Serilog.Formatting;
 using Serilog.Sinks.PeriodicBatching;
-using Serilog.Sinks.RabbitMQ.Publisher.ClientImplementation;
-using Serilog.Sinks.RabbitMQ.Publisher.Configuration;
 using Serilog.Sinks.RabbitMQ.Publisher.Configuration.Entities;
+using Serilog.Sinks.RabbitMQ.Publisher.Configuration.Settings;
 using Serilog.Sinks.RabbitMQ.Publisher.Configuration.Tools;
+using Serilog.Sinks.RabbitMQ.Publisher.RabbitMQHandler.ClientImplementation;
 
 namespace Serilog.Sinks.RabbitMQ.Publisher.Core.Sink.SinkExecutor
 {
-    public class RabbitMQBatchSink(EventClientConfiguration configuration, ITextFormatter textFormatter) : IBatchedLogEventSink
+    internal class RabbitMQBatchSink(EventClientConfiguration configuration, ITextFormatter textFormatter) : IBatchedLogEventSink
     {
         private readonly ITextFormatter _formatter = textFormatter;
 
@@ -22,20 +22,20 @@ namespace Serilog.Sinks.RabbitMQ.Publisher.Core.Sink.SinkExecutor
                 {
                     var stringWriter = new StringWriter();
 
-                    _formatter.Format(logEvent, stringWriter);
+                    _formatter.Format(logEvent: logEvent, output: stringWriter);
 
                     var eventTo = new EventTo
                     {
                         ApiLog = stringWriter.ToString(),
                         ApiLogFrom = configuration.ApiName,
                     };
-                    await client.PublishLogAsync(eventTo);
+                    await client.PublishLogAsync(@event: eventTo);
                 }
 
             }
             catch (AggregateException exceptions)
             {
-                throw new EventLogBusException("A big problem has occurred", exceptions.InnerExceptions);
+                throw new EventLogBusException(message: "A big problem has occurred", exceptions: exceptions.InnerExceptions);
             }
 
         }
